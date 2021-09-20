@@ -2,17 +2,19 @@ import React, { useState, useEffect } from "react";
 import YouTube from "react-youtube";
 import axios from "./axios";
 import "./Row.css";
-import movieTrailer from 'movie-trailer';
+import movieTrailer from "movie-trailer";
 
 const base_url = "https://image.tmdb.org/t/p/original/";
 
 function Row({ title, fetchUrl, isLargeRow }) {
   const [movies, setMovies] = useState([]);
-  const [trailerUrl ,setTrailerUrl] = useState("");
+  const [trailerUrl, setTrailerUrl] = useState("");
 
   // a snippet of code which runs based on a specific condition/variable
   useEffect(() => {
     //  if [], run once when the row loads, and dont run again
+
+    // 2nd git update
 
     async function fetchData() {
       const request = await axios.get(fetchUrl);
@@ -22,27 +24,27 @@ function Row({ title, fetchUrl, isLargeRow }) {
     fetchData();
   }, [fetchUrl]);
 
-  const opts ={
+  const opts = {
     height: "390",
     width: "100%",
     playerVars: {
-     // https://developer.google.com/youtube/player_parameters
+      // https://developer.google.com/youtube/player_parameters
       autoplay: 1,
     },
   };
 
   const handleClick = (movie) => {
     if (trailerUrl) {
-      setTrailerUrl('');
+      setTrailerUrl("");
     } else {
       movieTrailer(movie?.name || "")
-      .then((url) => {
-        const urlParams = new URLSearchParams(new URL(url).search);
-        setTrailerUrl(urlParams.get('v'));
-      })
-      .catch((error) => console.log(error));
+        .then((url) => {
+          const urlParams = new URLSearchParams(new URL(url).search);
+          setTrailerUrl(urlParams.get("v"));
+        })
+        .catch((error) => console.log(error));
     }
-  }
+  };
 
   return (
     <div className="row">
@@ -55,7 +57,9 @@ function Row({ title, fetchUrl, isLargeRow }) {
             key={movie.id}
             onClick={() => handleClick(movie)}
             className={`row__poster ${isLargeRow && "row__posterLarge"}`}
-            src={`${base_url}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+            src={`${base_url}${
+              isLargeRow ? movie.poster_path : movie.backdrop_path
+            }`}
             alt={movie.name}
           />
         ))}
